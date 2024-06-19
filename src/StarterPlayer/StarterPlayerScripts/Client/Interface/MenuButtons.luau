@@ -47,9 +47,17 @@ function module:Initialise(LoadGame, SpecialDeal)
 		LoadGame()
 	end))
 
-	Maid:GiveTask(ButtonsFrame.StoreBT.Activated:Connect(function() end))
+	Maid:GiveTask(ButtonsFrame.StoreBT.Activated:Connect(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.StoreFrame)
+	end))
 
-	Maid:GiveTask(ButtonsFrame.GameHubBT.Activated:Connect(function() end))
+	Maid:GiveTask(ButtonsFrame.GameInfoBT.Activated:Connect(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameInfoFrame)
+	end))
+
+	Maid:GiveTask(ButtonsFrame.GameHubBT.Activated:Connect(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameHubFrame)
+	end))
 
 	--//// Special Deal Content
 
