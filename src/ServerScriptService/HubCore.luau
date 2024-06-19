@@ -6,7 +6,7 @@ local HubModules = ServerScriptService:WaitForChild("HubModules")
 
 --// Functions
 local Library = {
-    MemoryService = require(HubModules.MemoryService)
+	MemoryService = require(HubModules.MemoryService),
 }
 
 --// Execution

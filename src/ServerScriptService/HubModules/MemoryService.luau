@@ -317,7 +317,7 @@ function Lib:JoinServerById(Player, PlaceId, ServerId)
 			local function transformFunction(oldValue)
 				return ServerData
 			end
-			
+
 			ServerData.CurrentPlayers = GetPlayers(PlaceId, ServerId)
 
 			if not (table.find(ServerData.CurrentPlayers, Player.UserId)) then
@@ -330,11 +330,11 @@ function Lib:JoinServerById(Player, PlaceId, ServerId)
 			task.delay(5, function()
 				PlayerDebounce[Player.UserId] = nil
 			end)
-			
+
 			return "Success"
 		else
 			local Queued = JoinServerQueue(Player, PlaceId, ServerId)
-			
+
 			if Queued == true then
 				return "Server is full. Pending in queue. " .. GetPriorityLevel(Player)
 			else
