@@ -59,6 +59,19 @@ function module:Initialise(LoadGame, SpecialDeal)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameHubFrame)
 	end))
 
+	task.spawn(function()
+		ClientModules.TransitionEffect:TweenTransition(nil, MainMenuUI.Menu.MenuFrame)
+	end)
+	task.spawn(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.StoreFrame, nil)
+	end)
+	task.spawn(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.GameInfoFrame, nil)
+	end)
+	task.spawn(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.GameHubFrame, nil)
+	end)
+
 	--//// Special Deal Content
 
 	if not SpecialDeal then
