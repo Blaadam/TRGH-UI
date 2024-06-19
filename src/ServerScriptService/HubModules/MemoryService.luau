@@ -48,7 +48,7 @@ function UpdatePlayers(PlaceId, ServerId, PlayerList)
 	if Current == nil then
 		Current = PlayerCountData:SetAsync(PlaceId .. "_" .. ServerId, PlayerList)
 	else
-		PlayerCountData:UpdateAsync(PlaceId .. "_" .. ServerId, function(oldValue)
+		PlayerCountData:UpdateAsync(PlaceId .. "_" .. ServerId, function()
 			return PlayerList
 		end)
 	end
@@ -89,7 +89,7 @@ function GetServersByPlaceId(PlaceId)
 
 	local SortedMap = GetSortedMap(PlaceId)
 	local RangeAsync = SortedMap:GetRangeAsync(0, 200)
-	for key, ServerInfo in pairs(RangeAsync) do
+	for _, ServerInfo in pairs(RangeAsync) do
 		local ServerData = ServerInfo.value
 		local Players = GetPlayers(PlaceId, ServerData.ServerId)
 		ServerData.CurrentPlayers = Players
@@ -111,7 +111,7 @@ function UpdateServerData(PlaceId, ServerId, ServerData)
 	local PlayerList = ServerData.CurrentPlayers or {}
 	ToUpdate.CurrentPlayers = {}
 
-	local function transformFunction(oldValue)
+	local function transformFunction()
 		return ToUpdate
 	end
 
@@ -190,7 +190,7 @@ end
 function GetPlaceData(PlaceId)
 	local returnData = nil
 
-	for TileName, TileData in pairs(ServerTiles) do
+	for _, TileData in pairs(ServerTiles) do
 		if TileData.PlaceId == PlaceId then
 			returnData = TileData
 		end
@@ -314,7 +314,7 @@ function Lib:JoinServerById(Player, PlaceId, ServerId)
 
 	if ServerData then
 		if canJoinServer(Player, ServerData) then
-			local function transformFunction(oldValue)
+			local function transformFunction()
 				return ServerData
 			end
 
@@ -386,7 +386,7 @@ function Lib:JoinServer(Player, PlaceId)
 				--UpdatePlayers(PlaceId,ServerData.ServerId,ServerData.CurrentPlayers)
 				ServerData.CurrentPlayers = {}
 
-				local function transformFunction(oldValue)
+				local function transformFunction()
 					return ServerData
 				end
 				GetSortedMap(PlaceId):UpdateAsync(ServerData.ServerId, transformFunction, ServerRefreshRate)
