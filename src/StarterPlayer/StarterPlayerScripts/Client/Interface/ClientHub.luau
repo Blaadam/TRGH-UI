@@ -1,5 +1,4 @@
 local module = {}
-
 --// Services
 
 --// Variables
@@ -7,10 +6,6 @@ local module = {}
 --// Functions
 
 --// Module Functions
-
-function module:Initialise()
-    
-end
 
 --// Return :)
 return module

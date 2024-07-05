@@ -52,6 +52,11 @@ function module:Initialise(LoadGame, SpecialDeal)
 			nil,
 			true
 		)
+
+		HubContent.Remotes.HubEvent:FireServer({
+			Action = "PlayHospital"
+		})
+
 		-- LoadGame()
 	end))
 

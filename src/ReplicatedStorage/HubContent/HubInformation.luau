@@ -1,6 +1,14 @@
 return {
 	Tiles = {
 		Hospital = {
+			Name = "Hospital",
+			PlaceId = 18344702548,
+			MaxPlayers = 100,
+			Image = { -- Picks a random image
+				"rbxassetid://000",
+			},
+		},
+		ResidencyHospital = {
 			Name = "Residency Hospital",
 			PlaceId = 000,
 			MaxPlayers = 100,

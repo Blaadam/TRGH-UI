@@ -30,16 +30,18 @@ local TeleportService = game:GetService("TeleportService")
 local ServerRefreshRate = 1500
 local PlayerCountData = DataStoreService:GetDataStore("PlayerCount")
 
-local SharedLibrary = ReplicatedStorage:WaitForChild("SharedLibrary")
+local HubContent = ReplicatedStorage:WaitForChild("HubContent")
 
 local SortedMaps = {}
 local Queues = {}
 local PlayerDebounce = {}
 local PlayerActiveQueue = {}
-local Moderators = require(SharedLibrary.General:WaitForChild("Moderators"))
+
+local HubInformation = require(HubContent.HubInformation)
+local BypassUsers = HubInformation.HubBypass
 
 local VersionControl = "Test0_"
-local ServerTiles = require(SharedLibrary.General:WaitForChild("ServerTiles"))
+local ServerTiles = HubInformation.Tiles
 
 --// Functions
 
@@ -130,7 +132,7 @@ end
 function CheckMod(Player)
 	local isMod = false
 
-	for _, v in pairs(Moderators) do
+	for _, v in pairs(BypassUsers) do
 		if Player.UserId == v then
 			isMod = true
 			break
@@ -153,7 +155,7 @@ function canJoinServer(Player, Server)
 		#Server.CurrentPlayers >= Server.MaxPlayers
 		and #Server.CurrentPlayers < (Server.MaxPlayers + Server.ReservedSpots)
 	then
-		if table.find(Moderators, Player.UserId) then
+		if table.find(BypassUsers, Player.UserId) then
 			can = true
 		end
 	end
@@ -177,9 +179,9 @@ function GetPriorityLevel(Player)
 	local Priority = PriorityLevel.Regular
 
 	pcall(function()
-		if Player:GetRankInGroup(7132841) >= 250 then
+		if Player:GetRankInGroup(7132841) >= 252 then
 			Priority = PriorityLevel.Developer
-		elseif Player:GetRankInGroup(7132841) >= 18 then
+		elseif Player:GetRankInGroup(7132841) >= 2 then
 			Priority = PriorityLevel.QA
 		end
 	end)
@@ -270,7 +272,7 @@ function LeaveServerQueue(Player)
 end
 
 function CreateServer(Player, PlaceId)
-	local PlaceInfo = GetPlaceData(PlaceId) or { MaxPlayers = 70, DeveloperSlots = 10 }
+	local PlaceInfo = GetPlaceData(PlaceId) or { MaxPlayers = 70, DeveloperSlots = 2 }
 
 	local ServerData = {
 		ServerId = nil,
