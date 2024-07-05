@@ -17,6 +17,14 @@ local HubInformation = require(HubContent.HubInformation)
 local Maid = require(HubContent.Packages.Maid).new()
 local HubObjects = HubContent.Objects
 
+local Client = LocalPlayer.PlayerScripts.Client
+
+local Library = {
+	ButtonEffect = require(Client.Misc.ButtonEffect)
+}
+
+local db = false
+
 --// Functions
 
 function GetGamepassData(assetID: number)
@@ -56,6 +64,7 @@ end
 --// Module Functions
 
 function Handler:Initialise()
+	--//// Gamepass Handling
 	for _, v in pairs(StoreOptions.PassesFrame.Passes:GetChildren()) do
 		if not v:IsA("Frame") then
 			continue
@@ -73,20 +82,28 @@ function Handler:Initialise()
 		local TemplateClone = HubObjects.GamepassTemplate:Clone()
 		TemplateClone.PassName.Text = GamepassData.Name
 		TemplateClone.Avatar.Image = "rbxassetid://" .. GamepassData.IconImageAssetId
-		TemplateClone.CostHolder.Cost.Text = GamepassData.PriceInRobux
+		TemplateClone.CostHolder.Cost.Text = GamepassData.PriceInRobux or "error"
 		Maid:GiveTask(TemplateClone.BuyBT.Activated:Connect(function()
+			Library.ButtonEffect(TemplateClone.BuyBT)
 			MarketplaceService:PromptGamePassPurchase(LocalPlayer, GamepassID)
 		end))
 
 		TemplateClone.Parent = StoreOptions.PassesFrame.Passes
 	end
 
+	--//// Tab Handling
+
 	for _, v in pairs(StoreOptions:GetChildren()) do
 		if not v:IsA("TextButton") then
 			continue
 		end
         Maid:GiveTask(v.Activated:Connect(function()
+			if db then return end
+			db = true
             TabClicked(v.Name)
+			Library.ButtonEffect(v)
+			task.wait(0.1)
+			db = false
         end))
 	end
 end

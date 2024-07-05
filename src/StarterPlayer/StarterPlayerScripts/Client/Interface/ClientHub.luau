@@ -18,6 +18,12 @@ local HubInformation = require(HubContent.HubInformation)
 local Maid = require(HubContent.Packages.Maid).new()
 local HubObjects = HubContent.Objects
 
+local Client = LocalPlayer.PlayerScripts.Client
+
+local Library = {
+	ButtonEffect = require(Client.Misc.ButtonEffect)
+}
+
 --// Functions
 
 function CleanUp()
@@ -90,6 +96,15 @@ function LoadServers(CodeName, TileData)
 			end
 		end
 
+		Maid:GiveTask(NewServer.PlayBT.Activated:Connect(function()
+			Library.ButtonEffect(NewServer.PlayBtn)
+			HubContent.Remotes.HubFunction:InvokeServer({
+				Action = "PlayGame",
+				Place = CodeName,
+				ServerID = ServerData.ServerID
+			})
+		end))
+
 		NewServer.Parent = ServerBrowser
 	end
 
@@ -101,6 +116,7 @@ end
 
 function module:Initialise()
 	Maid:GiveTask(GameHub.Servers.Area.BackBT.Activated:Connect(function()
+		Library.ButtonEffect(GameHub.Servers.Area.BackBT)
 		GameHub.Servers.Visible = false
 		GameHub.TeleportsArea.Visible = true
 	end))
@@ -110,10 +126,12 @@ function module:Initialise()
 		if not TileData then
 			continue
 		end
+
 		v.GameTitle.Text = TileData.Name
 		v.GameIcon.Image = TileData.Image[math.random(1, #TileData.Image)]
 
 		Maid:GiveTask(v.PlayBtn.Activated:Connect(function()
+			Library.ButtonEffect(v.PlayBtn)
 			HubContent.Remotes.HubFunction:InvokeServer({
 				Action = "PlayGame",
 				Place = v.Name,
@@ -121,6 +139,7 @@ function module:Initialise()
 		end))
 
 		Maid:GiveTask(v.ServersBtn.Activated:Connect(function()
+			Library.ButtonEffect(v.ServersBtn)
 			LoadServers(v.Name, TileData)
 		end))
 	end

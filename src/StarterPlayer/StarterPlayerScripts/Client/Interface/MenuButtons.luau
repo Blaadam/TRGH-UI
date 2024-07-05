@@ -20,10 +20,13 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local MainMenuUI = PlayerGui:WaitForChild("MainMenuUI")
 
+local Client = LocalPlayer.PlayerScripts.Client
+
 local ButtonsFrame = MainMenuUI.Menu.MenuFrame.ButtonsArea
 
 local ClientModules = {
-	TransitionEffect = require(LocalPlayer.PlayerScripts.Client.Interface.TransitionEffect),
+	TransitionEffect = require(Client.Interface.TransitionEffect),
+	ButtonEffect = require(Client.Misc.ButtonEffect)
 }
 
 local HubContent = ReplicatedStorage:WaitForChild("HubContent")
@@ -41,6 +44,7 @@ function module:Initialise(SpecialDeal)
 
 	--// Load Game
 	Maid:GiveTask(ButtonsFrame.PlayBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(ButtonsFrame.PlayBT)
 		ClientModules.TransitionEffect:SolidColourTransition(
 			MainMenuUI.Menu.MenuFrame,
 			nil,
@@ -57,30 +61,36 @@ function module:Initialise(SpecialDeal)
 
 	--// Game Store
 	Maid:GiveTask(ButtonsFrame.StoreBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(ButtonsFrame.StoreBT)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.StoreFrame)
 	end))
 
 	Maid:GiveTask(MainMenuUI.Menu.StoreFrame.Store.CloseBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(MainMenuUI.Menu.StoreFrame.Store.CloseBT)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.StoreFrame, MainMenuUI.Menu.MenuFrame)
 	end))
 
 	--// Game Info
 
 	Maid:GiveTask(ButtonsFrame.GameInfoBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(ButtonsFrame.GameInfoBT)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameInfoFrame)
 	end))
 
 	Maid:GiveTask(MainMenuUI.Menu.GameInfoFrame.GameInfo.CloseBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(MainMenuUI.Menu.GameInfoFrame.GameInfo.CloseBT)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.GameInfoFrame, MainMenuUI.Menu.MenuFrame)
 	end))
 
 	--// Game Hub
 
 	Maid:GiveTask(ButtonsFrame.GameHubBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(ButtonsFrame.GameHubBT)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameHubFrame)
 	end))
 
 	Maid:GiveTask(MainMenuUI.Menu.GameHubFrame.GameHub.CloseBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(MainMenuUI.Menu.GameHubFrame.GameHub.CloseBT)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.GameHubFrame, MainMenuUI.Menu.MenuFrame)
 	end))
 
@@ -128,6 +138,7 @@ function module:Initialise(SpecialDeal)
 	end
 
 	Maid:GiveTask(ButtonsFrame.LimitedDeal.BuyBT.Activated:Connect(function()
+		ClientModules.ButtonEffect(ButtonsFrame.LimitedDeal.BuyBT)
 		MarketplaceService:PromptGamePassPurchase(LocalPlayer, SpecialDeal.GamepassID)
 	end))
 
