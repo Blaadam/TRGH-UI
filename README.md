@@ -1,7 +1,7 @@
-# TGRH-UI
+# TRGH-UI
 ---
 
-This repository contains the content for The Robloxian General Hospital's Main Menu.
+This repository contains the content for The [Robloxian General Hospital](https://www.roblox.com/groups/5663706/TRGH-The-Robloxian-General-Hospital#!/about)'s Main Menu.
 
 ---
 
