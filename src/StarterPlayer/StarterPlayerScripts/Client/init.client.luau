@@ -12,7 +12,8 @@ local HubContent = ReplicatedStorage:WaitForChild("HubContent")
 local ClientLibrary = {
 	HubInformation = require(HubContent.HubInformation),
 	MenuButtons = require(Interface.MenuButtons),
-	StoreHandler = require(Interface.StoreHandler)
+	StoreHandler = require(Interface.StoreHandler),
+	ClientHub = require(Interface.ClientHub)
 }
 
 --// Functions
@@ -26,11 +27,6 @@ function LogInitialisation(Msg, WarnMsg)
 
 		print(Msg)
 	end
-end
-
-function LoadGame()
-	print("Game is loaded!")
-	--@TODO: Write a procedure which loads the user into the experience after the Loading Screen.
 end
 
 function SetupPlayerCamera()
@@ -49,10 +45,13 @@ task.spawn(function()
 	pcall(SetupPlayerCamera)
 end)
 
-ClientLibrary.MenuButtons:Initialise(LoadGame, ClientLibrary.HubInformation.LimitedDealData)
+ClientLibrary.MenuButtons:Initialise(ClientLibrary.HubInformation.LimitedDealData)
 LogInitialisation("Menu Buttons Initialised")
 
 ClientLibrary.StoreHandler:Initialise()
 LogInitialisation("Store Handler Initialised")
+
+ClientLibrary.ClientHub:Initialise()
+LogInitialisation("Client Hub Initialised")
 
 LogInitialisation("Client Initialisation Complete", true)

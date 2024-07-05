@@ -13,31 +13,31 @@ return {
 			PlaceId = 000,
 			MaxPlayers = 100,
 			Image = { -- Picks a random image
-				"rbxassetid://000",
+				"rbxassetid://17801433194",
 			},
 		},
-		Security = {
+		SecurityTraining = {
 			Name = "Security Training",
 			PlaceId = 000,
 			MaxPlayers = 100,
 			Image = { -- Picks a random image
-				"rbxassetid://000",
+				"rbxassetid://17801434486",
 			},
 		},
-		Training = {
+		TrainingCenter = {
 			Name = "Training Center",
 			PlaceId = 000,
 			MaxPlayers = 100,
 			Image = { -- Picks a random image
-				"rbxassetid://000",
+				"rbxassetid://17801387396",
 			},
 		},
-		Interview = {
+		InterviewCenter = {
 			Name = "Interview Center",
 			PlaceId = 000,
 			MaxPlayers = 100,
 			Image = { -- Picks a random image
-				"rbxassetid://000",
+				"rbxassetid://17801335060",
 			},
 		},
 	},

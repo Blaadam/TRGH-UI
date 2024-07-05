@@ -1,9 +1,9 @@
 --[[
 	Utilised for interactions in between experiences
-	Last modified by blaadam, 2024-06-15
+	Last modified by blaadam, 2024-07-05
 	
 	local ServerData = {
-		ServerId = nil,
+		ServerID = nil,
 		ReserveCode = nil,
 		
 		CurrentPlayers = {},
@@ -45,19 +45,19 @@ local ServerTiles = HubInformation.Tiles
 
 --// Functions
 
-function UpdatePlayers(PlaceId, ServerId, PlayerList)
-	local Current = PlayerCountData:GetAsync(PlaceId .. "_" .. ServerId)
+function UpdatePlayers(PlaceId, ServerID, PlayerList)
+	local Current = PlayerCountData:GetAsync(PlaceId .. "_" .. ServerID)
 	if Current == nil then
-		Current = PlayerCountData:SetAsync(PlaceId .. "_" .. ServerId, PlayerList)
+		Current = PlayerCountData:SetAsync(PlaceId .. "_" .. ServerID, PlayerList)
 	else
-		PlayerCountData:UpdateAsync(PlaceId .. "_" .. ServerId, function()
+		PlayerCountData:UpdateAsync(PlaceId .. "_" .. ServerID, function()
 			return PlayerList
 		end)
 	end
 end
 
-function GetPlayers(PlaceId, ServerId)
-	local Current = PlayerCountData:GetAsync(PlaceId .. "_" .. ServerId)
+function GetPlayers(PlaceId, ServerID)
+	local Current = PlayerCountData:GetAsync(PlaceId .. "_" .. ServerID)
 
 	return Current
 end
@@ -74,13 +74,13 @@ function GetSortedMap(PlaceId)
 	return SortedMap
 end
 
-function GetQueue(PlaceId, ServerId)
+function GetQueue(PlaceId, ServerID)
 	local Queue = nil
-	if Queues[PlaceId .. "_" .. ServerId] then
-		Queue = Queues[PlaceId .. "_" .. ServerId]
+	if Queues[PlaceId .. "_" .. ServerID] then
+		Queue = Queues[PlaceId .. "_" .. ServerID]
 	else
-		Queues[PlaceId .. "_" .. ServerId] = MemoryStoreService:GetQueue(PlaceId .. "_" .. ServerId, 30)
-		Queue = Queues[PlaceId .. "_" .. ServerId]
+		Queues[PlaceId .. "_" .. ServerID] = MemoryStoreService:GetQueue(PlaceId .. "_" .. ServerID, 30)
+		Queue = Queues[PlaceId .. "_" .. ServerID]
 	end
 
 	return Queue
@@ -93,7 +93,7 @@ function GetServersByPlaceId(PlaceId)
 	local RangeAsync = SortedMap:GetRangeAsync(0, 200)
 	for _, ServerInfo in pairs(RangeAsync) do
 		local ServerData = ServerInfo.value
-		local Players = GetPlayers(PlaceId, ServerData.ServerId)
+		local Players = GetPlayers(PlaceId, ServerData.ServerID)
 		ServerData.CurrentPlayers = Players
 		table.insert(Servers, ServerData)
 	end
@@ -101,14 +101,14 @@ function GetServersByPlaceId(PlaceId)
 	return Servers
 end
 
-function GetServerData(PlaceId, ServerId)
-	local ServerData = GetSortedMap(PlaceId):GetAsync(ServerId)
-	local PlayerList = GetPlayers(PlaceId, ServerId)
+function GetServerData(PlaceId, ServerID)
+	local ServerData = GetSortedMap(PlaceId):GetAsync(ServerID)
+	local PlayerList = GetPlayers(PlaceId, ServerID)
 	ServerData.CurrentPlayers = PlayerList
 	return ServerData
 end
 
-function UpdateServerData(PlaceId, ServerId, ServerData)
+function UpdateServerData(PlaceId, ServerID, ServerData)
 	local ToUpdate = ServerData
 	local PlayerList = ServerData.CurrentPlayers or {}
 	ToUpdate.CurrentPlayers = {}
@@ -121,12 +121,12 @@ function UpdateServerData(PlaceId, ServerId, ServerData)
 		ToUpdate.RegionLocation = ToUpdate.RegionLocation.countryCode .. "-" .. ToUpdate.RegionLocation.region
 	end
 
-	UpdatePlayers(PlaceId, ServerId, PlayerList)
-	GetSortedMap(PlaceId):UpdateAsync(ServerId, transformFunction, ServerRefreshRate)
+	UpdatePlayers(PlaceId, ServerID, PlayerList)
+	GetSortedMap(PlaceId):UpdateAsync(ServerID, transformFunction, ServerRefreshRate)
 end
 
-function DeleteServerData(PlaceId, ServerId)
-	GetSortedMap(PlaceId):RemoveAsync(ServerId)
+function DeleteServerData(PlaceId, ServerID)
+	GetSortedMap(PlaceId):RemoveAsync(ServerID)
 end
 
 function CheckMod(Player)
@@ -201,8 +201,8 @@ function GetPlaceData(PlaceId)
 	return returnData
 end
 
-function GetQueueList(PlaceId, ServerId, Count)
-	local Queue = GetQueue(PlaceId, ServerId)
+function GetQueueList(PlaceId, ServerID, Count)
+	local Queue = GetQueue(PlaceId, ServerID)
 	local QueueList, Id = Queue:ReadAsync(Count, false, 0)
 
 	if Id then
@@ -216,8 +216,8 @@ function GetQueueList(PlaceId, ServerId, Count)
 	return QueueList
 end
 
-function JoinServerQueue(Player, PlaceId, ServerId, Priority)
-	local Queue = GetQueue(PlaceId, ServerId)
+function JoinServerQueue(Player, PlaceId, ServerID, Priority)
+	local Queue = GetQueue(PlaceId, ServerID)
 	local Success = false
 	local AdjustedPriority = GetPriorityLevel(Player) or Priority or 0
 
@@ -230,7 +230,7 @@ function JoinServerQueue(Player, PlaceId, ServerId, Priority)
 			Success = true
 			PlayerActiveQueue[Player.UserId] = {
 				PlaceId = PlaceId,
-				ServerId = ServerId,
+				ServerID = ServerID,
 				InQueue = true,
 			}
 		else
@@ -246,7 +246,7 @@ function LeaveServerQueue(Player)
 	local Success = false
 
 	if PlayerQueue then
-		local Queue = GetQueue(PlayerQueue.PlaceId, PlayerQueue.ServerId)
+		local Queue = GetQueue(PlayerQueue.PlaceId, PlayerQueue.ServerID)
 
 		if Queue then
 			local success, err = pcall(function()
@@ -255,7 +255,7 @@ function LeaveServerQueue(Player)
 			end)
 			PlayerActiveQueue[Player.UserId] = {
 				PlaceId = nil,
-				ServerId = nil,
+				ServerID = nil,
 				InQueue = false,
 			}
 			if success then
@@ -275,7 +275,7 @@ function CreateServer(Player, PlaceId)
 	local PlaceInfo = GetPlaceData(PlaceId) or { MaxPlayers = 70, DeveloperSlots = 2 }
 
 	local ServerData = {
-		ServerId = nil,
+		ServerID = nil,
 		ReserveCode = nil,
 
 		CurrentPlayers = {},
@@ -296,23 +296,23 @@ function CreateServer(Player, PlaceId)
 	local TeleportResult = TeleportService:TeleportAsync(PlaceId, { Player }, TeleportOptions)
 
 	if PlaceInfo.MaxPlayers > 1 then
-		ServerData.ServerId = TeleportResult.PrivateServerId
+		ServerData.ServerID = TeleportResult.PrivateServerID
 		ServerData.ReserveCode = TeleportResult.ReservedServerAccessCode
 		table.insert(ServerData.CurrentPlayers, Player.UserId)
-		UpdatePlayers(PlaceId, ServerData.ServerId, ServerData.CurrentPlayers)
+		UpdatePlayers(PlaceId, ServerData.ServerID, ServerData.CurrentPlayers)
 		ServerData.CurrentPlayers = {}
 	end
 	return ServerData
 end
 
 --// Module Functions
-function Lib:JoinServerById(Player, PlaceId, ServerId)
+function Lib:JoinServerById(Player, PlaceId, ServerID)
 	if PlayerDebounce[Player.UserId] == true then
 		return
 	end
 	PlayerDebounce[Player.UserId] = true
 
-	local ServerData = GetServerData(PlaceId, ServerId)
+	local ServerData = GetServerData(PlaceId, ServerID)
 
 	if ServerData then
 		if canJoinServer(Player, ServerData) then
@@ -320,13 +320,13 @@ function Lib:JoinServerById(Player, PlaceId, ServerId)
 				return ServerData
 			end
 
-			ServerData.CurrentPlayers = GetPlayers(PlaceId, ServerId)
+			ServerData.CurrentPlayers = GetPlayers(PlaceId, ServerID)
 
 			if not (table.find(ServerData.CurrentPlayers, Player.UserId)) then
 				table.insert(ServerData.CurrentPlayers, Player.UserId)
 			end
 			ServerData.CurrentPlayers = {}
-			GetSortedMap(PlaceId):UpdateAsync(ServerData.ServerId, transformFunction, ServerRefreshRate)
+			GetSortedMap(PlaceId):UpdateAsync(ServerData.ServerID, transformFunction, ServerRefreshRate)
 			TeleportService:TeleportToPrivateServer(PlaceId, ServerData.ReserveCode, { Player })
 
 			task.delay(5, function()
@@ -335,7 +335,7 @@ function Lib:JoinServerById(Player, PlaceId, ServerId)
 
 			return "Success"
 		else
-			local Queued = JoinServerQueue(Player, PlaceId, ServerId)
+			local Queued = JoinServerQueue(Player, PlaceId, ServerID)
 
 			if Queued == true then
 				return "Server is full. Pending in queue. " .. GetPriorityLevel(Player)
@@ -369,13 +369,13 @@ function Lib:JoinServer(Player, PlaceId)
 		if Servers and #Servers > 0 then
 			local tempData = {
 				PlayerCount = 0,
-				ServerId = nil,
+				ServerID = nil,
 			}
 
-			for ServerId, Data in pairs(Servers) do
-				if #Data.CurrentPlayers > tempData.PlayerCount or tempData.ServerId == nil then
+			for ServerID, Data in pairs(Servers) do
+				if #Data.CurrentPlayers > tempData.PlayerCount or tempData.ServerID == nil then
 					if canJoinServer(Player, Data) then
-						tempData.ServerId = ServerId
+						tempData.ServerID = ServerID
 						tempData.PlayerCount = #Data.CurrentPlayers
 						ServerData = Data
 						break
@@ -385,13 +385,13 @@ function Lib:JoinServer(Player, PlaceId)
 
 			if ServerData then
 				table.insert(ServerData.CurrentPlayers, Player.UserId)
-				--UpdatePlayers(PlaceId,ServerData.ServerId,ServerData.CurrentPlayers)
+				--UpdatePlayers(PlaceId,ServerData.ServerID,ServerData.CurrentPlayers)
 				ServerData.CurrentPlayers = {}
 
 				local function transformFunction()
 					return ServerData
 				end
-				GetSortedMap(PlaceId):UpdateAsync(ServerData.ServerId, transformFunction, ServerRefreshRate)
+				GetSortedMap(PlaceId):UpdateAsync(ServerData.ServerID, transformFunction, ServerRefreshRate)
 				TeleportService:TeleportToPrivateServer(PlaceId, ServerData.ReserveCode, { Player })
 				task.delay(10, function()
 					PlayerDebounce[Player.UserId] = nil
@@ -400,7 +400,7 @@ function Lib:JoinServer(Player, PlaceId)
 			else
 				ServerData = CreateServer(Player, PlaceId)
 				GetSortedMap(PlaceId):SetAsync(
-					ServerData.ServerId,
+					ServerData.ServerID,
 					ServerData,
 					ServerRefreshRate,
 					#ServerData.CurrentPlayers
@@ -413,7 +413,7 @@ function Lib:JoinServer(Player, PlaceId)
 		else
 			ServerData = CreateServer(Player, PlaceId)
 			GetSortedMap(PlaceId):SetAsync(
-				ServerData.ServerId,
+				ServerData.ServerID,
 				ServerData,
 				ServerRefreshRate,
 				#ServerData.CurrentPlayers
@@ -433,7 +433,7 @@ function Lib:CreateServer(Player, PlaceId)
 	PlayerDebounce[Player.UserId] = true
 
 	local ServerData = CreateServer(Player, PlaceId)
-	GetSortedMap(PlaceId):SetAsync(ServerData.ServerId, ServerData, ServerRefreshRate, #ServerData.CurrentPlayers)
+	GetSortedMap(PlaceId):SetAsync(ServerData.ServerID, ServerData, ServerRefreshRate, #ServerData.CurrentPlayers)
 	task.delay(30, function()
 		PlayerDebounce[Player.UserId] = nil
 	end)
@@ -444,35 +444,35 @@ function Lib:GetServers(PlaceId)
 	return GetServersByPlaceId(PlaceId)
 end
 
-function Lib:GetServerData(PlaceId, ServerId)
-	return GetServerData(PlaceId, ServerId)
+function Lib:GetServerData(PlaceId, ServerID)
+	return GetServerData(PlaceId, ServerID)
 end
 
-function Lib:UpdateServerData(PlaceId, ServerId, ServerData)
-	return UpdateServerData(PlaceId, ServerId, ServerData)
+function Lib:UpdateServerData(PlaceId, ServerID, ServerData)
+	return UpdateServerData(PlaceId, ServerID, ServerData)
 end
 
-function Lib:DeleteServer(PlaceId, ServerId)
-	return DeleteServerData(PlaceId, ServerId)
+function Lib:DeleteServer(PlaceId, ServerID)
+	return DeleteServerData(PlaceId, ServerID)
 end
 
-function Lib:UpdatePlayerDatastore(PlaceId, ServerId, PlayerList)
-	UpdatePlayers(PlaceId, ServerId, PlayerList)
+function Lib:UpdatePlayerDatastore(PlaceId, ServerID, PlayerList)
+	UpdatePlayers(PlaceId, ServerID, PlayerList)
 end
 
 function Lib:LeaveQueue(Player)
 	LeaveServerQueue(Player)
 end
 
-function Lib:GetQueue(PlaceId, ServerId, Count)
-	return GetQueueList(PlaceId, ServerId, Count)
+function Lib:GetQueue(PlaceId, ServerID, Count)
+	return GetQueueList(PlaceId, ServerID, Count)
 end
 
-function Lib:IsPlayerInQueue(Player, PlaceId, ServerId)
+function Lib:IsPlayerInQueue(Player, PlaceId, ServerID)
 	local PlayerQueue = PlayerActiveQueue[Player.UserId]
 	local is = false
 	if PlayerQueue then
-		if PlayerQueue.PlaceId == PlaceId and PlayerQueue.ServerId == ServerId and PlayerQueue.InQueue == true then
+		if PlayerQueue.PlaceId == PlaceId and PlayerQueue.ServerID == ServerID and PlayerQueue.InQueue == true then
 			is = true
 		else
 			is = false

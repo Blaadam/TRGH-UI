@@ -36,14 +36,11 @@ local Maid = MaidModule.new()
 
 --// Module Function
 
-function module:Initialise(LoadGame, SpecialDeal)
+function module:Initialise(SpecialDeal)
 	--//// Main Buttons
 
 	--// Load Game
 	Maid:GiveTask(ButtonsFrame.PlayBT.Activated:Connect(function()
-		-- if not LoadGame then
-		-- 	return
-		-- end
 		ClientModules.TransitionEffect:SolidColourTransition(
 			MainMenuUI.Menu.MenuFrame,
 			nil,
@@ -53,11 +50,9 @@ function module:Initialise(LoadGame, SpecialDeal)
 			true
 		)
 
-		HubContent.Remotes.HubEvent:FireServer({
+		HubContent.Remotes.HubFunction:InvokeServer({
 			Action = "PlayHospital"
 		})
-
-		-- LoadGame()
 	end))
 
 	--// Game Store
