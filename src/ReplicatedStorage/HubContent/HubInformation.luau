@@ -40,6 +40,22 @@ return {
 				"rbxassetid://17801335060",
 			},
 		},
+		QuizCenter = {
+			Name = "Quiz Center",
+			PlaceId = 000,
+			MaxPlayers = 1,
+			Image = { -- Picks a random image
+				"rbxassetid://17801335060",
+			},
+		},
+		RankCenter = {
+			Name = "Rank Center",
+			PlaceId = 000,
+			MaxPlayers = 1,
+			Image = { -- Picks a random image
+				"rbxassetid://17801335060",
+			},
+		},
 	},
 	LimitedDealData = {
 		GamepassID = 93578829,

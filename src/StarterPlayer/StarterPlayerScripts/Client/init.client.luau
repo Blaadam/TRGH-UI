@@ -13,7 +13,8 @@ local ClientLibrary = {
 	HubInformation = require(HubContent.HubInformation),
 	MenuButtons = require(Interface.MenuButtons),
 	StoreHandler = require(Interface.StoreHandler),
-	ClientHub = require(Interface.ClientHub)
+	ClientHub = require(Interface.ClientHub),
+	InfoButtons = require(Interface.InfoButtons),
 }
 
 --// Functions
@@ -30,7 +31,7 @@ function LogInitialisation(Msg, WarnMsg)
 end
 
 function SetupPlayerCamera()
-	local Camera:Camera = workspace.Camera
+	local Camera: Camera = workspace.Camera
 	Camera.CameraType = Enum.CameraType.Scriptable
 
 	repeat
@@ -59,5 +60,8 @@ LogInitialisation("Store Handler Initialised")
 
 ClientLibrary.ClientHub:Initialise()
 LogInitialisation("Client Hub Initialised")
+
+ClientLibrary.InfoButtons:Initialise()
+LogInitialisation("Info Buttons Initialised")
 
 LogInitialisation("Client Initialisation Complete", true)

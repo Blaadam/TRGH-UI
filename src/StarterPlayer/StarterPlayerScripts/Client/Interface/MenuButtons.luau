@@ -45,6 +45,7 @@ function module:Initialise(SpecialDeal)
 	--// Load Game
 	Maid:GiveTask(ButtonsFrame.PlayBT.Activated:Connect(function()
 		ClientModules.ButtonEffect(ButtonsFrame.PlayBT)
+		
 		ClientModules.TransitionEffect:SolidColourTransition(
 			MainMenuUI.Menu.MenuFrame,
 			nil,

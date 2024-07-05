@@ -21,7 +21,8 @@ local HubObjects = HubContent.Objects
 local Client = LocalPlayer.PlayerScripts.Client
 
 local Library = {
-	ButtonEffect = require(Client.Misc.ButtonEffect)
+	TransitionEffect = require(Client.Interface.TransitionEffect),
+	ButtonEffect = require(Client.Misc.ButtonEffect),
 }
 
 --// Functions
@@ -98,18 +99,28 @@ function LoadServers(CodeName, TileData)
 
 		Maid:GiveTask(NewServer.PlayBT.Activated:Connect(function()
 			Library.ButtonEffect(NewServer.PlayBtn)
+
 			HubContent.Remotes.HubFunction:InvokeServer({
 				Action = "PlayGame",
 				Place = CodeName,
-				ServerID = ServerData.ServerID
+				ServerID = ServerData.ServerID,
 			})
+
+			Library.TransitionEffect:SolidColourTransition(
+				MainMenuUI.Menu.GameHubFrame,
+				nil,
+				Color3.fromHex("#353535"),
+				nil,
+				nil,
+				true
+			)
 		end))
 
 		NewServer.Parent = ServerBrowser
 	end
 
-    ServerBrowser_Area.TotalOnline.Text = `{tostring(PlayersOnline)} Online`
-    ServerBrowser_Area.FriendsInGame.Text = `{tostring(FriendsPlaying)} Friends In-Game`
+	ServerBrowser_Area.TotalOnline.Text = `{tostring(PlayersOnline)} Online`
+	ServerBrowser_Area.FriendsInGame.Text = `{tostring(FriendsPlaying)} Friends In-Game`
 end
 
 --// Module Functions
@@ -127,15 +138,25 @@ function module:Initialise()
 			continue
 		end
 
-		v.GameTitle.Text = TileData.Name
+		v.GameTitle.Text = string.upper(TileData.Name)
 		v.GameIcon.Image = TileData.Image[math.random(1, #TileData.Image)]
 
 		Maid:GiveTask(v.PlayBtn.Activated:Connect(function()
 			Library.ButtonEffect(v.PlayBtn)
+
 			HubContent.Remotes.HubFunction:InvokeServer({
 				Action = "PlayGame",
 				Place = v.Name,
 			})
+
+			Library.TransitionEffect:SolidColourTransition(
+				MainMenuUI.Menu.GameHubFrame,
+				nil,
+				Color3.fromHex("#353535"),
+				nil,
+				nil,
+				true
+			)
 		end))
 
 		Maid:GiveTask(v.ServersBtn.Activated:Connect(function()

@@ -404,7 +404,6 @@ function Lib:JoinServer(Player, PlaceId)
 				end)
 				return "Success"
 			else
-				print("Creating server-c")
 				ServerData = CreateServer(Player, PlaceId)
 				GetSortedMap(PlaceId):SetAsync(
 					ServerData.ServerID,
@@ -418,7 +417,6 @@ function Lib:JoinServer(Player, PlaceId)
 				return "Success"
 			end
 		else
-			print("Creating server-b")
 			ServerData = CreateServer(Player, PlaceId)
 			GetSortedMap(PlaceId):SetAsync(
 				ServerData.ServerID,
