@@ -70,9 +70,21 @@ function module:Initialise(LoadGame, SpecialDeal)
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameInfoFrame)
 	end))
 
+	Maid:GiveTask(MainMenuUI.Menu.GameInfoFrame.GameInfo.CloseBT.Activated:Connect(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.GameInfoFrame, MainMenuUI.Menu.MenuFrame)
+	end))
+
+	--// Game Hub
+
 	Maid:GiveTask(ButtonsFrame.GameHubBT.Activated:Connect(function()
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameHubFrame)
 	end))
+
+	Maid:GiveTask(MainMenuUI.Menu.GameHubFrame.GameHub.CloseBT.Activated:Connect(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.GameHubFrame, MainMenuUI.Menu.MenuFrame)
+	end))
+
+	--//// Screen Defaulting
 
 	task.spawn(function()
 		ClientModules.TransitionEffect:TweenTransition(nil, MainMenuUI.Menu.MenuFrame)
