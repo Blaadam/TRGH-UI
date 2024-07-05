@@ -12,12 +12,12 @@ local Mouse = LocalPlayer:GetMouse()
 
 local db = false
 
-local SpecialButtonNames = {
-	"CloseBtn",
-	"CloseBT",
-	"BuyBT",
-	"BuyBtn"
-}
+-- local SpecialButtonNames = {
+-- 	"CloseBtn",
+-- 	"CloseBT",
+-- 	"BuyBT",
+-- 	"BuyBtn"
+-- }
 
 function MakeCircleInstance()
 	local Image: ImageLabel = Instance.new("ImageLabel")
@@ -92,7 +92,7 @@ function CircleClick(Button, X, Y)
 			false,
 			nil
 		)
-		for i = 1, 10 do
+		for _ = 1, 10 do
 			Circle.ImageTransparency = Circle.ImageTransparency + 0.01
 			task.wait(Time / 10)
 		end
