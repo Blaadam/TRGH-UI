@@ -20,7 +20,7 @@ local HubObjects = HubContent.Objects
 local Client = LocalPlayer.PlayerScripts.Client
 
 local Library = {
-	ButtonEffect = require(Client.Misc.ButtonEffect)
+	ButtonEffect = require(Client.Misc.ButtonEffect),
 }
 
 local db = false
@@ -36,28 +36,31 @@ function TabClicked(buttonName: string)
 		if not v:IsA("TextButton") then
 			continue
 		end
-        
-		if v.bg:FindFirstChild("UIStroke") then
-			v.bg.UIStroke:Destroy()
-		end
 
-		local Stroke: UIStroke = nil
+		task.spawn(function()
+			local OldStroke = v:FindFirstChild("UIStroke", true)
+			if OldStroke then
+				OldStroke:Destroy()
+			end
 
-		if v.Name == buttonName then
-			Stroke = HubObjects.SelectedUIStroke:Clone()
-		else
-			Stroke = HubObjects.DefaultUIStroke:Clone()
-		end
+			local Stroke: UIStroke = nil
 
-        Stroke.Name = "UIStroke"
-		Stroke.Parent = v.bg
+			if v.Name == buttonName then
+				Stroke = HubObjects.SelectedUIStroke:Clone()
+			else
+				Stroke = HubObjects.DefaultUIStroke:Clone()
+			end
 
-		local TabSection = string.sub(v.Name, 1, string.len(v.Name) - 2)
+			Stroke.Name = "UIStroke"
+			Stroke.Parent = v.bg
 
-		local Frame: Frame = StoreOptions:FindFirstChild(TabSection .. "Frame")
-		if Frame then
-			Frame.Visible = v.Name == buttonName
-		end
+			local TabSection = string.sub(v.Name, 1, string.len(v.Name) - 2)
+
+			local Frame: Frame = StoreOptions:FindFirstChild(TabSection .. "Frame")
+			if Frame then
+				Frame.Visible = v.Name == buttonName
+			end
+		end)
 	end
 end
 
@@ -97,14 +100,16 @@ function Handler:Initialise()
 		if not v:IsA("TextButton") then
 			continue
 		end
-        Maid:GiveTask(v.Activated:Connect(function()
-			if db then return end
+		Maid:GiveTask(v.Activated:Connect(function()
+			if db then
+				return
+			end
 			db = true
-            TabClicked(v.Name)
+			TabClicked(v.Name)
 			Library.ButtonEffect(v)
-			task.wait(0.1)
+			task.wait(0.35)
 			db = false
-        end))
+		end))
 	end
 end
 

@@ -95,7 +95,9 @@ function CircleClick(Button, X, Y)
 		Button.ClipsDescendants = save
 
 		if UIGradient and IsCloseBtn then
-			UIGradient.Parent = OriginalSettings.Parent
+			if UIGradient.Parent ~= nil then
+				UIGradient.Parent = OriginalSettings.Parent
+			end
 			UIGradient.ApplyStrokeMode = OriginalSettings.ApplyStrokeMode
 		end
 	end)
