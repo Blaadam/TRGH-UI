@@ -32,6 +32,12 @@ end
 function SetupPlayerCamera()
 	local Camera:Camera = workspace.Camera
 	Camera.CameraType = Enum.CameraType.Scriptable
+
+	repeat
+		Camera.CameraType = Enum.CameraType.Scriptable
+		task.wait()
+	until Enum.CameraType.Scriptable == Camera.CameraType
+
 	Camera.CFrame = game.Workspace.CameraPart.CFrame
 
 	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
