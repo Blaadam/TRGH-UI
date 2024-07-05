@@ -10,8 +10,6 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 
-local db = false
-
 -- local SpecialButtonNames = {
 -- 	"CloseBtn",
 -- 	"CloseBT",
@@ -39,8 +37,6 @@ function MakeSound()
 end
 
 function CircleClick(Button, X, Y)
-	if db then return end
-
 	if not X then
 		X = Mouse.X
 	end
@@ -63,7 +59,6 @@ function CircleClick(Button, X, Y)
 			UIGradient.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 		end
 
-		db = true
 		local save = Button.ClipsDescendants
 		Button.ClipsDescendants = true
 
@@ -98,7 +93,6 @@ function CircleClick(Button, X, Y)
 		end
 		Circle:Destroy()
 		Button.ClipsDescendants = save
-		db = false
 
 		if UIGradient and IsCloseBtn then
 			UIGradient.Parent = OriginalSettings.Parent
