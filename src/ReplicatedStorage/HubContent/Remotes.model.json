@@ -1,0 +1,15 @@
+{
+    "ignoreUnknownInstances": true,
+    "ClassName": "Folder",
+    
+    "Children": [
+      {
+        "Name": "HubFunction",
+        "ClassName": "RemoteFunction"
+      },
+      {
+        "Name": "HubEvent",
+        "ClassName": "RemoteEvent"
+      }
+    ]
+  }

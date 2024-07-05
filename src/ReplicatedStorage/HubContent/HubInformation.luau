@@ -37,6 +37,22 @@ return {
 		GamepassID = 93578829,
 		OldCost = 0,
 	},
+	Gamepasses = {
+		703120436, -- Registered Nurse
+		703084504, -- Nurses in Charge
+		702989525, -- Doctors Assistant
+		703492010, -- Medical Doctor
+		704109702, -- Surgeon
+		702631689, -- Head of Doctors
+		769368925, -- NPC Access
+		8342994, -- VIP
+		8342996, -- Wheelchair
+		93578829, -- Maintenance Team
+		93579314, -- Janitorial Service
+		93580458, -- Balloon
+		93603480, -- Lobby Piano
+		93625105, -- Double Credits
+	},
 	HubBypass = {
 		337922098, -- NocturnalStory
 		542336613, -- dan_kulik

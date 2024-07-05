@@ -71,7 +71,8 @@ function effect:SolidColourTransition(
 	Frame2: Frame,
 	SolidColor: Color3,
 	FramePos1: UDim2,
-	FramePos2: UDim2
+	FramePos2: UDim2,
+	NoRepeat: boolean
 )
 	if Frame1 then
 		local FrameTween =
@@ -95,6 +96,10 @@ function effect:SolidColourTransition(
 		task.wait(0.1)
 		FrameTween:Play()
 		Debris:AddItem(FrameTween, EffectTweenInfo.Time + 0.1)
+	end
+
+	if NoRepeat then
+		return
 	end
 
 	local Tween2 = TweenService:Create(EffectUI.SolidColorFrame, EffectTweenInfo, { Transparency = 1 })

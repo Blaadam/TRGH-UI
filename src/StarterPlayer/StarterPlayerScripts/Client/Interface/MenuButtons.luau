@@ -39,17 +39,32 @@ local Maid = MaidModule.new()
 function module:Initialise(LoadGame, SpecialDeal)
 	--//// Main Buttons
 
+	--// Load Game
 	Maid:GiveTask(ButtonsFrame.PlayBT.Activated:Connect(function()
-		if not LoadGame then
-			return
-		end
-		ClientModules.TransitionEffect:SolidColourTransition(MainMenuUI.Menu.MenuFrame, nil, Color3.fromHex("#353535"))
-		LoadGame()
+		-- if not LoadGame then
+		-- 	return
+		-- end
+		ClientModules.TransitionEffect:SolidColourTransition(
+			MainMenuUI.Menu.MenuFrame,
+			nil,
+			Color3.fromHex("#353535"),
+			nil,
+			nil,
+			true
+		)
+		-- LoadGame()
 	end))
 
+	--// Game Store
 	Maid:GiveTask(ButtonsFrame.StoreBT.Activated:Connect(function()
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.StoreFrame)
 	end))
+
+	Maid:GiveTask(MainMenuUI.Menu.StoreFrame.Store.CloseBT.Activated:Connect(function()
+		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.StoreFrame, MainMenuUI.Menu.MenuFrame)
+	end))
+
+	--// Game Info
 
 	Maid:GiveTask(ButtonsFrame.GameInfoBT.Activated:Connect(function()
 		ClientModules.TransitionEffect:TweenTransition(MainMenuUI.Menu.MenuFrame, MainMenuUI.Menu.GameInfoFrame)
