@@ -2,18 +2,8 @@
 local module = {}
 
 --// Services
-local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
---// Types
-export type GamepassDataStructure = {
-	Name: string,
-	Description: string,
-	IconImageAssetId: number,
-	ProductId: number,
-	PriceInRobux: number,
-}
 
 --// Variables
 local LocalPlayer = Players.LocalPlayer
