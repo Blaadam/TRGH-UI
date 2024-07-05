@@ -16,23 +16,27 @@ local Library = {
 
 --// Execution
 HubRemotes.HubFunction.OnServerInvoke = function(Player, RequestData)
-	if not RequestData then
-		return
-	end
-
-	if RequestData.Action == "PlayHospital" then
-		Library.MemoryService:JoinServer(Player, Library.HubInformation.Tiles.Hospital.PlaceId)
-	elseif RequestData.Action == "PlayGame" then
-		if RequestData.ServerID then
-			Library.MemoryService:JoinServerById(
-				Player,
-				Library.HubInformation.Tiles[RequestData.Place].PlaceId,
-				RequestData.ServerID
-			)
+	local success, response = pcall(function()
+		if not RequestData then
 			return
 		end
-		Library.MemoryService:JoinServer(Player, Library.HubInformation.Tiles[RequestData.Place].PlaceId)
-	elseif RequestData.Action == "GetServers" then
-		Library.MemoryService:GetServers(Library.HubInformation.Tiles[RequestData.Place].PlaceId)
-	end
+	
+		if RequestData.Action == "PlayHospital" then
+			Library.MemoryService:JoinServer(Player, Library.HubInformation.Tiles.Hospital.PlaceId)
+		elseif RequestData.Action == "PlayGame" then
+			if RequestData.ServerID then
+				Library.MemoryService:JoinServerById(
+					Player,
+					Library.HubInformation.Tiles[RequestData.Place].PlaceId,
+					RequestData.ServerID
+				)
+				return
+			end
+			Library.MemoryService:JoinServer(Player, Library.HubInformation.Tiles[RequestData.Place].PlaceId)
+		elseif RequestData.Action == "GetServers" then
+			return Library.MemoryService:GetServers(Library.HubInformation.Tiles[RequestData.Place].PlaceId)
+		end
+	end)
+	if not success then warn("ERROR: "..response) end
+	return response
 end

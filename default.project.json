@@ -56,5 +56,6 @@
       "$ignoreUnknownInstances": true,
       "$path": "src/Workspace"
     }
-  }
+  },
+  "servePlaceIds": [18121954097]
 }

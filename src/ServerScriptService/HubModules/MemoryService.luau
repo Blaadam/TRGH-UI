@@ -105,6 +105,11 @@ function GetServerData(PlaceId, ServerID)
 	local ServerData = GetSortedMap(PlaceId):GetAsync(ServerID)
 	local PlayerList = GetPlayers(PlaceId, ServerID)
 	ServerData.CurrentPlayers = PlayerList
+	
+	if not ServerData.ServerId then
+		ServerData.ServerId = ServerID
+	end
+
 	return ServerData
 end
 
@@ -293,10 +298,10 @@ function CreateServer(Player, PlaceId)
 	local TeleportOptions = Instance.new("TeleportOptions")
 	TeleportOptions.ShouldReserveServer = true
 
-	local TeleportResult = TeleportService:TeleportAsync(PlaceId, { Player }, TeleportOptions)
-
+	local TeleportResult:TeleportAsyncResult = TeleportService:TeleportAsync(PlaceId, { Player }, TeleportOptions)
+	
 	if PlaceInfo.MaxPlayers > 1 then
-		ServerData.ServerID = TeleportResult.PrivateServerID
+		ServerData.ServerID = TeleportResult.PrivateServerId
 		ServerData.ReserveCode = TeleportResult.ReservedServerAccessCode
 		table.insert(ServerData.CurrentPlayers, Player.UserId)
 		UpdatePlayers(PlaceId, ServerData.ServerID, ServerData.CurrentPlayers)
@@ -357,6 +362,7 @@ function Lib:JoinServer(Player, PlaceId)
 	local PlaceInfo = GetPlaceData(PlaceId)
 
 	if PlaceInfo.MaxPlayers == 1 then
+		print("Creating Server for 1 Player")
 		CreateServer(Player, PlaceId)
 		task.delay(30, function()
 			PlayerDebounce[Player.UserId] = nil
@@ -398,6 +404,7 @@ function Lib:JoinServer(Player, PlaceId)
 				end)
 				return "Success"
 			else
+				print("Creating server-c")
 				ServerData = CreateServer(Player, PlaceId)
 				GetSortedMap(PlaceId):SetAsync(
 					ServerData.ServerID,
@@ -411,6 +418,7 @@ function Lib:JoinServer(Player, PlaceId)
 				return "Success"
 			end
 		else
+			print("Creating server-b")
 			ServerData = CreateServer(Player, PlaceId)
 			GetSortedMap(PlaceId):SetAsync(
 				ServerData.ServerID,

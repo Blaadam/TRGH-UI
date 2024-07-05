@@ -53,7 +53,7 @@ function LoadServers(CodeName, TileData)
 	local ActiveServers = HubContent.Remotes.HubFunction:InvokeServer({
 		Action = "GetServers",
 		Place = CodeName,
-	}) or {}
+	})
 
 	local PlayersOnline = 0
 	local FriendsPlaying = 0
@@ -69,9 +69,9 @@ function LoadServers(CodeName, TileData)
 		end
 
 		NewServer.ServerName.Text = `Server #{tostring(index)}   ({ServerData.ServerID})`
-		NewServer.GameIcon = TileData.Image[math.random(1, #TileData.Image)]
+		NewServer.GameIcon.Image = TileData.Image[math.random(1, #TileData.Image)]
 
-		for _, UserID in pairs(ServerData.CurrentPlayers0) do
+		for _, UserID in pairs(ServerData.CurrentPlayers) do
 			local Success, AvatarLink = pcall(GetPlayerImage, UserID)
 			if not Success then
 				continue
